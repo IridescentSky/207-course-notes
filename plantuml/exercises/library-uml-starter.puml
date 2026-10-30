@@ -23,23 +23,61 @@ hide empty members
 abstract class Item {
   - title : String
   - catalogueNumber : String
+  - borrowPeriod : int
   + getTitle() : String
   + getCatalogueNumber() : String
 }
 
 ' TODO: add boxes for Book and DVD. What differs between them — a whole class,
 '       or just the value of a loan-period field?
+class Book {
+    - borrowPeriod: int
+}
 
+class DVD {
+    - borrowPeriod: int
+}
 ' TODO: reference-only items cannot be borrowed at all. Decide how to say that
 '       in the diagram: a subclass, or an interface (e.g. "Borrowable") that
 '       only some items realize?
+interface Borrowable {
+    + Borrow(): void
+}
 
 ' TODO: add Member and Librarian. What do they have in common? Add the common
 '       supertype if you think one is warranted.
+class User {
+ - userNumber: String
+}
 
+class Member {
+    - activeHolds: List<Hold>
+    + placeHold(item: Item): void
+    + getActiveHolds(): List<Hold>
+}
+
+class Librarian {
+    + addItem(item: Item): void
+    + waiveFee(user: User): void
+}
 ' TODO: add whatever represents a hold, and connect it to the classes that need
 '       to know about it.
 
+class Hold {
+    - title : String
+    - catalogueNumber : String
+    - placedDate : String
+    + getTitle() : String
+    + getCatalogueNumber() : String
+    + getPlacedDate() : String
+}
 ' TODO: add the arrows between all of your types.
+Item <|-- Book
+Item <|-- DVD
+Item -- Borrowable
+
+User <|-- Librarian
+User <|-- Member
+Member -- Hold
 
 @enduml
